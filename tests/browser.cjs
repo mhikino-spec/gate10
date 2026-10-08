@@ -1,0 +1,30 @@
+// NODE_PATH must point to a directory containing Playwright.
+const {chromium}=require('playwright');
+const fs=require('fs');
+(async()=>{
+ const browser=await chromium.launch({headless:true,channel:'msedge'});
+ const ctx=await browser.newContext({viewport:{width:1440,height:1080}});
+ const page=await ctx.newPage(),errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ const login=async name=>{await page.goto('http://127.0.0.1:8810/');await page.locator('[name=login]').fill(name);await page.getByRole('button',{name:'ログイン',exact:true}).click();await page.getByRole('heading',{name:name==='manager'?'全体ダッシュボード':'自分の案件一覧',exact:true}).waitFor();};
+ const shot=async name=>page.screenshot({path:'screenshots/'+name+'.png',fullPage:true});
+ await login('sales01');await shot('01_営業案件一覧');
+ await page.getByRole('button',{name:'＋ 新規案件を登録'}).click();await page.locator('#dealform').waitFor();
+ const unique='デモ動作確認 '+Date.now();
+ await page.locator('[name=customer]').fill('架空みらい工業');await page.locator('[name=title]').fill(unique);
+ await page.locator('[name=stage]').selectOption('提案中');await page.locator('[name=amount]').fill('2400000');
+ await page.locator('[name=memo]').fill('次回の訪問に同行をお願いしたいです。');
+ await shot('02_案件登録');
+ await page.getByRole('button',{name:'案件を登録',exact:true}).click();await page.getByRole('heading',{name:'案件の詳細',exact:true}).waitFor();
+ const detailUrl=page.url();
+ await page.getByRole('button',{name:'案件を更新',exact:true}).click();await page.locator('#dealform').waitFor();await page.locator('[name=action]').selectOption('電話');await page.getByRole('button',{name:'変更を保存',exact:true}).click();await page.getByRole('heading',{name:'案件の詳細',exact:true}).waitFor();
+ await page.getByRole('button',{name:'ログアウト'}).click();await login('manager');await shot('03_部長ダッシュボード');
+ await page.goto(detailUrl);await page.getByRole('button',{name:'同行しようか',exact:true}).click();await page.getByText('営業に反応を返しました',{exact:true}).waitFor();await shot('04_部長案件詳細');
+ await page.getByRole('button',{name:'ログアウト'}).click();await login('sales01');
+ await page.goto(detailUrl);await page.getByText('同行しようか',{exact:true}).waitFor();await shot('05_営業反応確認');
+ await page.setViewportSize({width:390,height:844});await page.goto('http://127.0.0.1:8810/');await page.getByRole('heading',{name:'自分の案件一覧',exact:true}).waitFor();await shot('06_スマホ一覧');
+ if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('Mobile viewport overflow');
+ if(errors.length)throw Error(errors.join('\n'));
+ fs.writeFileSync('evidence/browser-results.txt','PASS: sales login -> create -> update -> manager dashboard -> read -> react -> sales feedback\nPASS: six real screenshots; mobile 390px has no document overflow\nPASS: no uncaught browser JavaScript errors\n');
+ await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

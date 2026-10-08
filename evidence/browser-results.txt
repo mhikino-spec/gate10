@@ -1,0 +1,3 @@
+PASS: sales login -> create -> update -> manager dashboard -> read -> react -> sales feedback
+PASS: six real screenshots; mobile 390px has no document overflow
+PASS: no uncaught browser JavaScript errors

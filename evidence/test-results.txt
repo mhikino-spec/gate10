@@ -1,0 +1,40 @@
+test_full_workflow (test_app.Workflow.test_full_workflow) ... 127.0.0.1 - - [08/Oct/2026 23:07:46] "POST /api/login HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:46] "POST /api/login HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:46] "GET /api/deals HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:46] "POST /api/deals HTTP/1.1" 201 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/login HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "GET /api/deals/25 HTTP/1.1" 403 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals/25/read HTTP/1.1" 403 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals/25/read HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals/25/react HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "GET /api/deals/25 HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "GET /api/deals/25 HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals/25 HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "GET /api/deals/25 HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals/25 HTTP/1.1" 409 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals/25/react HTTP/1.1" 409 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals HTTP/1.1" 409 -
+ok
+test_login_lock (test_app.Workflow.test_login_lock) ... 127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/login HTTP/1.1" 401 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/login HTTP/1.1" 401 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/login HTTP/1.1" 401 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/login HTTP/1.1" 401 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/login HTTP/1.1" 401 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/login HTTP/1.1" 429 -
+ok
+test_security_and_validation (test_app.Workflow.test_security_and_validation) ... 127.0.0.1 - - [08/Oct/2026 23:07:47] "GET /api/deals HTTP/1.1" 401 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/login HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals HTTP/1.1" 403 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals HTTP/1.1" 403 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals HTTP/1.1" 422 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/login HTTP/1.1" 200 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "POST /api/deals HTTP/1.1" 403 -
+127.0.0.1 - - [08/Oct/2026 23:07:47] "GET /api/deals/99999 HTTP/1.1" 404 -
+ok
+test_seed_does_not_reset (test_app.Workflow.test_seed_does_not_reset) ... ok
+test_stagnation_and_deadline (test_app.Workflow.test_stagnation_and_deadline) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 3.812s
+
+OK
